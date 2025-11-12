@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métodos de Pagamento - AutoCart</title>
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/payments.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="btn-back" id="btnBack" onclick="window.history.back()">
+                <span>‹</span>
+            </button>
+            <h1>Métodos de Pagamento</h1>
+            <div class="header-space"></div>
+        </div>
+
+        <!-- Botão Adicionar -->
+        <button class="btn-add-payment" id="btnAddPayment">
+            <span class="btn-icon">+</span>
+            Adicionar Método de Pagamento
+        </button>
+
+        <!-- Métodos Salvos -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>💳 Seus Métodos</h2>
+            </div>
+
+            <div class="empty-state" id="emptyState">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>
+                <p>Nenhum método cadastrado</p>
+                <small>Adicione cartões, PIX ou outros métodos</small>
+            </div>
+
+            <div class="payment-methods-list" id="paymentMethodsList"></div>
+        </div>
+
+        <!-- Métodos Disponíveis -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>✨ Métodos Disponíveis</h2>
+            </div>
+
+            <div class="available-methods">
+                <div class="method-option" data-type="credit">
+                    <div class="method-icon">💳</div>
+                    <div class="method-info">
+                        <span class="method-name">Cartão de Crédito</span>
+                        <small>Visa, Mastercard, Elo, etc.</small>
+                    </div>
+                    <span class="method-arrow">›</span>
+                </div>
+
+                <div class="method-option" data-type="debit">
+                    <div class="method-icon">🏦</div>
+                    <div class="method-info">
+                        <span class="method-name">Cartão de Débito</span>
+                        <small>Débito em conta corrente</small>
+                    </div>
+                    <span class="method-arrow">›</span>
+                </div>
+
+                <div class="method-option" data-type="pix">
+                    <div class="method-icon">📱</div>
+                    <div class="method-info">
+                        <span class="method-name">PIX</span>
+                        <small>Pagamento instantâneo</small>
+                    </div>
+                    <span class="method-arrow">›</span>
+                </div>
+
+                <div class="method-option" data-type="money">
+                    <div class="method-icon">💵</div>
+                    <div class="method-info">
+                        <span class="method-name">Dinheiro</span>
+                        <small>Pagamento em espécie</small>
+                    </div>
+                    <span class="method-arrow">›</span>
+                </div>
+
+                <div class="method-option" data-type="voucher">
+                    <div class="method-icon">🎫</div>
+                    <div class="method-info">
+                        <span class="method-name">Vale Alimentação</span>
+                        <small>VR, Sodexo, Alelo, etc.</small>
+                    </div>
+                    <span class="method-arrow">›</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Cartão -->
+    <div class="modal" id="cardModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Adicionar Cartão</h3>
+                <button class="btn-close-modal" id="btnCloseModal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="card-preview" id="cardPreview">
+                    <div class="card-chip"></div>
+                    <div class="card-number" id="previewNumber">•••• •••• •••• ••••</div>
+                    <div class="card-info">
+                        <div class="card-holder" id="previewHolder">NOME DO TITULAR</div>
+                        <div class="card-expiry" id="previewExpiry">MM/AA</div>
+                    </div>
+                    <div class="card-brand" id="cardBrand"></div>
+                </div>
+
+                <form id="cardForm">
+                    <div class="form-group">
+                        <label for="cardNumber">Número do Cartão</label>
+                        <input 
+                            type="tel" 
+                            id="cardNumber" 
+                            placeholder="0000 0000 0000 0000" 
+                            maxlength="19" 
+                            inputmode="numeric" 
+                            pattern="[0-9]*" 
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardHolder">Nome do Titular</label>
+                        <input 
+                            type="text" 
+                            id="cardHolder" 
+                            placeholder="Como está no cartão" 
+                            required
+                        >
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cardExpiry">Validade</label>
+                            <input 
+                                type="tel" 
+                                id="cardExpiry" 
+                                placeholder="MM/AA" 
+                                maxlength="5" 
+                                inputmode="numeric" 
+                                pattern="[0-9/]*" 
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cardCVV">CVV</label>
+                            <input 
+                                type="tel" 
+                                id="cardCVV" 
+                                placeholder="123" 
+                                maxlength="4" 
+                                inputmode="numeric" 
+                                pattern="[0-9]*" 
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="cardDefault">
+                            <span>Definir como padrão</span>
+                        </label>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" id="btnCancel">Cancelar</button>
+                        <button type="submit" class="btn-save">Salvar Cartão</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal PIX -->
+    <div class="modal" id="pixModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Adicionar Chave PIX</h3>
+                <button class="btn-close-modal" onclick="closePixModal()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="pixForm">
+                    <div class="form-group">
+                        <label for="pixType">Tipo de Chave</label>
+                        <select id="pixType" required>
+                            <option value="">Selecione o tipo</option>
+                            <option value="cpf">CPF</option>
+                            <option value="phone">Telefone</option>
+                            <option value="email">E-mail</option>
+                            <option value="random">Chave Aleatória</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pixKey">Chave PIX</label>
+                        <input 
+                            type="text" 
+                            id="pixKey" 
+                            placeholder="Digite sua chave" 
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pixName">Nome/Apelido</label>
+                        <input type="text" id="pixName" placeholder="Ex: PIX Principal" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="pixDefault">
+                            <span>Definir como padrão</span>
+                        </label>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="closePixModal()">Cancelar</button>
+                        <button type="submit" class="btn-save">Salvar PIX</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Outros -->
+    <div class="modal" id="otherModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="otherModalTitle">Adicionar Método</h3>
+                <button class="btn-close-modal" onclick="closeOtherModal()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="otherForm">
+                    <div class="form-group">
+                        <label for="otherName">Nome/Descrição</label>
+                        <input type="text" id="otherName" placeholder="Ex: Dinheiro, Vale Refeição" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="otherDefault">
+                            <span>Definir como padrão</span>
+                        </label>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="closeOtherModal()">Cancelar</button>
+                        <button type="submit" class="btn-save">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <span id="toastMessage">Método salvo com sucesso!</span>
+    </div>
+
+    <script src="js/payments.js"></script>
+</body>
+</html>

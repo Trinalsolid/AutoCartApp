@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoCart - Carrinho Inteligente</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <!-- Botão de Menu do Usuário (canto superior esquerdo) -->
+            <button class="user-menu-btn" id="userMenuBtn">
+                <div class="user-avatar">
+                    <span id="userInitials">JS</span>
+                </div>
+            </button>
+
+            <h1>🛒 AutoCart</h1>
+            
+            <div class="total-display">
+                <div class="total-label">Total</div>
+                <div class="total-value" id="totalValue">R$ 0,00</div>
+            </div>
+        </div>
+
+        <!-- Menu Lateral do Usuário -->
+        <div class="user-menu-overlay" id="userMenuOverlay"></div>
+        <div class="user-menu" id="userMenu">
+            <div class="user-menu-header">
+                <div class="user-avatar-large">
+                    <span id="userInitialsLarge">JS</span>
+                </div>
+                <div class="user-info">
+                    <h3 id="userName">João Silva</h3>
+                    <p id="userEmail">joao@email.com</p>
+                </div>
+                <button class="close-menu-btn" id="closeMenuBtn">✕</button>
+            </div>
+
+            <div class="user-menu-items">
+                <a href="historico.html" class="menu-item">
+                    <span class="menu-icon">📋</span>
+                    <div class="menu-text">
+                        <span>Histórico de Compras</span>
+                        <small>Ver todas as compras</small>
+                    </div>
+                    <span class="menu-arrow">›</span>
+                </a>
+
+                <a href="payment.html" class="menu-item">
+                    <span class="menu-icon">💳</span>
+                    <div class="menu-text">
+                        <span>Formas de Pagamento</span>
+                        <small>Gerenciar cartões</small>
+                    </div>
+                    <span class="menu-arrow">›</span>
+                </a>
+
+                <a href="settings.html" class="menu-item">
+                    <span class="menu-icon">⚙️</span>
+                    <div class="menu-text">
+                        <span>Configurações</span>
+                        <small>Preferências da conta</small>
+                    </div>
+                    <span class="menu-arrow">›</span>
+                </a>
+
+                <div class="menu-divider"></div>
+
+                <a href="#" class="menu-item menu-item-danger" id="menuLogout">
+                    <span class="menu-icon">🚪</span>
+                    <div class="menu-text">
+                        <span>Sair</span>
+                        <small>Desconectar da conta</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="scanner-section">
+            <div class="scanner-input">
+                <input 
+                    type="text" 
+                    id="barcodeInput" 
+                    placeholder="Digite ou escaneie o código de barras"
+                    autocomplete="off"
+                >
+                <button class="btn-add" id="btnAdd">Adicionar</button>
+            </div>
+            <div class="message" id="message"></div>
+        </div>
+
+        <div class="cart-section">
+            <div class="cart-header">
+                Itens no Carrinho (<span id="itemCount">0</span>)
+            </div>
+            
+            <div id="emptyCart" class="empty-cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <p style="font-size: 16px; margin-bottom: 5px;">Seu carrinho está vazio</p>
+                <p style="font-size: 14px;">Escaneie um produto para começar</p>
+            </div>
+
+            <div class="cart-items" id="cartItems"></div>
+
+            <div class="checkout-section" id="checkoutSection" style="display: none;">
+                <button class="btn-checkout" id="btnCheckout">
+                    Finalizar Compra - <span id="checkoutTotal">R$ 0,00</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/authchek.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/usermenu.js"></script>
+</body>
+</html>

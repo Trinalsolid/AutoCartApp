@@ -1,0 +1,7 @@
+{
+  "name": "AutoCart",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - AutoCart</title>
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="btn-back" id="btnBack" onclick="window.history.back()">
+                <span>‹</span>
+            </button>
+            <h1>Configurações</h1>
+            <div class="header-space"></div>
+        </div>
+
+        <!-- Seção: Aparência -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>🎨 Aparência</h2>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-item-info">
+                    <label>Tema de Cores</label>
+                    <small>Escolha a cor principal do aplicativo</small>
+                </div>
+            </div>
+
+            <div class="color-palette">
+                <div class="color-option" data-color="#667eea" data-name="Roxo" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <span class="color-check">✓</span>
+                    <span class="color-name">Roxo</span>
+                </div>
+                <div class="color-option" data-color="#f56565" data-name="Vermelho" style="background: linear-gradient(135deg, #f56565 0%, #c53030 100%);">
+                    <span class="color-check">✓</span>
+                    <span class="color-name">Vermelho</span>
+                </div>
+                <div class="color-option" data-color="#ed8936" data-name="Laranja" style="background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);">
+                    <span class="color-check">✓</span>
+                    <span class="color-name">Laranja</span>
+                </div>
+                <div class="color-option" data-color="#48bb78" data-name="Verde" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);">
+                    <span class="color-check">✓</span>
+                    <span class="color-name">Verde</span>
+                </div>
+                <div class="color-option" data-color="#4299e1" data-name="Azul" style="background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);">
+                    <span class="color-check">✓</span>
+                    <span class="color-name">Azul</span>
+                </div>
+                <div class="color-option" data-color="#0bc5ea" data-name="Ciano" style="background: linear-gradient(135deg, #0bc5ea 0%, #00b5d8 100%);">
+                    <span class="color-check">✓</span>
+                    <span class="color-name">Ciano</span>
+                </div>
+                <div class="color-option" data-color="#9f7aea" data-name="Púrpura" style="background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);">
+                    <span class="color-check">✓</span>
+                    <span class="color-name">Púrpura</span>
+                </div>
+                <div class="color-option" data-color="#ed64a6" data-name="Rosa" style="background: linear-gradient(135deg, #ed64a6 0%, #d53f8c 100%);">
+                    <span class="color-check">✓</span>
+                    <span class="color-name">Rosa</span>
+                </div>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-item-info">
+                    <label for="darkModeToggle">Modo Escuro</label>
+                    <small>Ativar tema escuro</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-item-info">
+                    <label for="fontSize">Tamanho do Texto</label>
+                    <small>Ajuste o tamanho da fonte (<span id="fontSizeValue">16px</span>)</small>
+                </div>
+            </div>
+            <input type="range" class="range-slider" id="fontSize" min="14" max="20" value="16" step="1">
+        </div>
+
+        <!-- Seção: Notificações -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>🔔 Notificações</h2>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-item-info">
+                    <label for="notifyToggle">Notificações Push</label>
+                    <small>Receber alertas e atualizações</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="notifyToggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-item-info">
+                    <label for="soundToggle">Som das Notificações</label>
+                    <small>Reproduzir som ao receber notificações</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="soundToggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-item-info">
+                    <label for="cartReminders">Lembretes de Carrinho</label>
+                    <small>Receber lembretes sobre itens no carrinho</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="cartReminders" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Seção: Preferências -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>⚙️ Preferências</h2>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-item-info">
+                    <label for="languageSelect">Idioma</label>
+                    <small>Idioma do aplicativo</small>
+                </div>
+                <select id="languageSelect" class="select-input">
+                    <option value="pt-BR">Português (Brasil)</option>
+                    <option value="en-US">English (US)</option>
+                    <option value="es-ES">Español</option>
+                </select>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-item-info">
+                    <label for="currencySelect">Moeda</label>
+                    <small>Moeda padrão para preços</small>
+                </div>
+                <select id="currencySelect" class="select-input">
+                    <option value="BRL">Real (R$)</option>
+                    <option value="USD">Dólar ($)</option>
+                    <option value="EUR">Euro (€)</option>
+                </select>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-item-info">
+                    <label for="autoSave">Salvar Automaticamente</label>
+                    <small>Salvar alterações automaticamente</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="autoSave" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Seção: Dados -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>💾 Dados e Armazenamento</h2>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-item-info">
+                    <label>Cache de Dados</label>
+                    <small>Limpar dados temporários do aplicativo</small>
+                </div>
+                <button class="btn-secondary" id="clearCache">Limpar</button>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-item-info">
+                    <label>Exportar Dados</label>
+                    <small>Fazer backup dos seus dados</small>
+                </div>
+                <button class="btn-secondary" id="exportData">Exportar</button>
+            </div>
+        </div>
+
+        <!-- Seção: Sistema -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>🔧 Sistema</h2>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-item-info">
+                    <label>Versão do App</label>
+                    <small>AutoCart v1.0.0</small>
+                </div>
+            </div>
+
+            <div class="settings-item">
+                <button class="btn-reset" id="resetSettings">
+                    🔄 Redefinir Todas as Configurações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de confirmação -->
+    <div class="toast" id="toast">
+        <span id="toastMessage">Configurações salvas!</span>
+    </div>
+
+    <script src="js/settings.js"></script>
+</body>
+</html>
