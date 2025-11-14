@@ -1,6 +1,14 @@
-// ============================
-// JS do Menu do Usuário
-// ============================
+/*
+|--------------------------------------------------------------------------
+| JS do Menu do Usuário (usermenu.js)
+|--------------------------------------------------------------------------
+|
+| para carregar dados do usuário e para o logout.
+|
+*/
+
+// Importar as novas funções de autenticação
+import { globalLogout, getCurrentUser, onAuthReady } from './authchek.js';
 
 // Elementos DOM
 const userMenuBtn = document.getElementById('userMenuBtn');
@@ -10,18 +18,18 @@ const closeMenuBtn = document.getElementById('closeMenuBtn');
 const menuLogout = document.getElementById('menuLogout');
 
 // ============================
-// Funções do Menu
+// Funções do Menu (Abertura/Fechamento)
 // ============================
 
 function openUserMenu() {
-    userMenu.classList.add('active');
-    userMenuOverlay.classList.add('active');
+    if (userMenu) userMenu.classList.add('active');
+    if (userMenuOverlay) userMenuOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
 function closeUserMenu() {
-    userMenu.classList.remove('active');
-    userMenuOverlay.classList.remove('active');
+    if (userMenu) userMenu.classList.remove('active');
+    if (userMenuOverlay) userMenuOverlay.classList.remove('active');
     document.body.style.overflow = '';
 }
 
@@ -29,45 +37,39 @@ function closeUserMenu() {
 // Event Listeners
 // ============================
 
-// Abrir menu
-userMenuBtn.addEventListener('click', openUserMenu);
+// Adiciona "if" para garantir que os elementos existem
+if (userMenuBtn) userMenuBtn.addEventListener('click', openUserMenu);
+if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeUserMenu);
+if (userMenuOverlay) userMenuOverlay.addEventListener('click', closeUserMenu);
 
-// Fechar menu
-closeMenuBtn.addEventListener('click', closeUserMenu);
-userMenuOverlay.addEventListener('click', closeUserMenu);
-
-// Logout
-menuLogout.addEventListener('click', function(e) {
-    e.preventDefault();
-    if (confirm('Deseja realmente sair da sua conta?')) {
-        // Limpar dados do usuário
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        
-        // Limpar carrinho do mercado atual
-        const urlParams = new URLSearchParams(window.location.search);
-        const selectedMarket = urlParams.get('market') || 'default';
-        localStorage.removeItem('cart_' + selectedMarket);
-        
-        // Redirecionar para login
-        window.location.href = 'login.html';
-    }
-});
+// Logout (AGORA FUNCIONA COM FIREBASE)
+if (menuLogout) {
+    menuLogout.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('Deseja realmente sair da sua conta?')) {
+            globalLogout(); // <-- Chama a nova função global
+        }
+    });
+}
 
 // ============================
-// Carregar informações do usuário
+// Carregar informações do usuário (AGORA FUNCIONA COM FIREBASE)
 // ============================
 
 function loadUserInfo() {
-    // Buscar dados do usuário do localStorage ou API
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    // Busca o usuário logado do Firebase (via firebase-auth.js)
+    const user = getCurrentUser(); 
     
-    if (user.name) {
-        document.getElementById('userName').textContent = user.name;
-        document.getElementById('userEmail').textContent = user.email;
+    if (user && (user.displayName || user.email)) {
+        const userName = user.displayName || "Usuário"; // Pega o nome ou "Usuário"
+        const userEmail = user.email;
+
+        // Atualiza o menu
+        document.getElementById('userName').textContent = userName;
+        document.getElementById('userEmail').textContent = userEmail;
         
         // Gerar iniciais
-        const initials = user.name
+        const initials = userName
             .split(' ')
             .map(n => n[0])
             .join('')
@@ -80,28 +82,14 @@ function loadUserInfo() {
 }
 
 // ============================
-// Verificar autenticação
-// ============================
-
-function checkAuth() {
-    const user = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    
-    if (!user || !token) {
-        // Redirecionar para login se não estiver logado
-        window.location.href = 'login.html';
-        return false;
-    }
-    
-    loadUserInfo();
-    return true;
-}
-
-// ============================
 // Inicialização
 // ============================
 
 // Executar ao carregar a página
-document.addEventListener('DOMContentLoaded', function() {
-    checkAuth();
+document.addEventListener('DOMContentLoaded', async () => {
+    // Espera a autenticação do firebase-auth.js ficar pronta
+    await onAuthReady();
+    
+    // Só então carrega as informações do usuário no menu
+    loadUserInfo();
 });

@@ -1,8 +1,15 @@
-// ============================
-// JS do Histórico de Compras
-// ============================
+/*
+|--------------------------------------------------------------------------
+| JS do Histórico de Compras (historico.js)
+|--------------------------------------------------------------------------
+|
+| Busca o histórico real do endpoint /history do nosso backend.
+|
+*/
 
-// Elementos DOM
+import { onAuthReady, getUserToken } from './firebase-auth.js';
+
+// --- Elementos DOM (iguais aos seus) ---
 const btnBack = document.getElementById('btnBack');
 const filterPeriod = document.getElementById('filterPeriod');
 const filterMarket = document.getElementById('filterMarket');
@@ -11,49 +18,13 @@ const totalSpent = document.getElementById('totalSpent');
 const emptyState = document.getElementById('emptyState');
 const purchasesList = document.getElementById('purchasesList');
 
-// Dados simulados (em produção virá do backend)
-let purchasesData = [
-    {
-        id: '001',
-        market: 'Mercado A',
-        date: '2024-11-10',
-        items: 15,
-        total: 127.50
-    },
-    {
-        id: '002',
-        market: 'Mercado B',
-        date: '2024-11-08',
-        items: 8,
-        total: 89.90
-    },
-    {
-        id: '003',
-        market: 'Mercado A',
-        date: '2024-11-05',
-        items: 22,
-        total: 215.30
-    },
-    {
-        id: '004',
-        market: 'Mercado C',
-        date: '2024-11-02',
-        items: 12,
-        total: 156.80
-    },
-    {
-        id: '005',
-        market: 'Mercado A',
-        date: '2024-10-28',
-        items: 18,
-        total: 198.45
-    }
-];
+// --- Variáveis Globais ---
+let allPurchasesData = []; // Armazena todas as compras do backend
+const API_URL = "http://localhost:3000";
 
 // ============================
-// Funções de formatação
+// Funções de formatação (iguais)
 // ============================
-
 function formatDate(dateString) {
     const date = new Date(dateString);
     const today = new Date();
@@ -72,7 +43,6 @@ function formatDate(dateString) {
         });
     }
 }
-
 function formatPrice(price) {
     return price.toLocaleString('pt-BR', { 
         style: 'currency', 
@@ -81,16 +51,15 @@ function formatPrice(price) {
 }
 
 // ============================
-// Filtrar compras
+// Filtrar compras (MODIFICADO)
 // ============================
-
 function filterPurchases() {
     const period = filterPeriod.value;
-    const market = filterMarket.value;
+    const market = filterMarket.value; // ex: 'market_A'
     const today = new Date();
     
-    let filtered = purchasesData.filter(purchase => {
-        const purchaseDate = new Date(purchase.date);
+    let filtered = allPurchasesData.filter(purchase => {
+        const purchaseDate = new Date(purchase.paidTimestamp); // Usamos o timestamp de pagamento
         let passesDateFilter = true;
         let passesMarketFilter = true;
         
@@ -113,9 +82,9 @@ function filterPurchases() {
             passesDateFilter = purchaseDate >= yearAgo;
         }
         
-        // Filtro de mercado
+        // Filtro de mercado (agora usa o marketId real)
         if (market !== 'all') {
-            passesMarketFilter = purchase.market === market;
+            passesMarketFilter = purchase.marketId === market;
         }
         
         return passesDateFilter && passesMarketFilter;
@@ -125,18 +94,15 @@ function filterPurchases() {
 }
 
 // ============================
-// Renderizar compras
+// Renderizar compras (MODIFICADO)
 // ============================
-
 function renderPurchases() {
     const filtered = filterPurchases();
     
-    // Atualizar resumo
-    const total = filtered.reduce((sum, p) => sum + p.total, 0);
+    const total = filtered.reduce((sum, p) => sum + p.totalValue, 0);
     totalPurchases.textContent = filtered.length;
     totalSpent.textContent = formatPrice(total);
     
-    // Verificar se está vazio
     if (filtered.length === 0) {
         emptyState.style.display = 'block';
         purchasesList.innerHTML = '';
@@ -145,18 +111,25 @@ function renderPurchases() {
     
     emptyState.style.display = 'none';
     
-    // Renderizar lista
+    // Mapeia os marketId para nomes amigáveis (você pode expandir isso)
+    const marketNames = {
+        'market_A': 'Mercado A',
+        'market_B': 'Mercado B',
+        'market_default': 'Mercado Padrão'
+    };
+    
     let html = '';
     filtered.forEach(purchase => {
+        const marketName = marketNames[purchase.marketId] || purchase.marketId;
         html += `
-            <div class="purchase-card" onclick="viewPurchaseDetails('${purchase.id}')">
+            <div class="purchase-card" onclick="viewPurchaseDetails('${purchase.cartId}')">
                 <div class="purchase-header">
-                    <span class="purchase-market">${purchase.market}</span>
-                    <span class="purchase-date">${formatDate(purchase.date)}</span>
+                    <span class="purchase-market">${marketName}</span>
+                    <span class="purchase-date">${formatDate(purchase.paidTimestamp)}</span>
                 </div>
                 <div class="purchase-details">
-                    <span class="purchase-items">${purchase.items} itens</span>
-                    <span class="purchase-total">${formatPrice(purchase.total)}</span>
+                    <span class="purchase-items">${purchase.items.length} itens</span>
+                    <span class="purchase-total">${formatPrice(purchase.totalValue)}</span>
                 </div>
             </div>
         `;
@@ -168,48 +141,77 @@ function renderPurchases() {
 // ============================
 // Ver detalhes da compra
 // ============================
-
-function viewPurchaseDetails(purchaseId) {
-    alert(`Detalhes da compra #${purchaseId} - Em desenvolvimento`);
-    // Aqui você pode abrir um modal ou redirecionar para página de detalhes
+function viewPurchaseDetails(cartId) {
+    alert(`Detalhes da compra #${cartId} - Em desenvolvimento`);
+    // Aqui você pode abrir um modal e mostrar a 'purchase.items'
 }
 
 // ============================
-// Carregar do backend
+// Carregar do backend (MODIFICADO)
 // ============================
-
 async function loadPurchasesFromBackend() {
     try {
-        // const response = await fetch('http://localhost:3333/purchases', {
-        //     headers: {
-        //         'Authorization': 'Bearer ' + localStorage.getItem('token')
-        //     }
-        // });
-        // const data = await response.json();
-        // purchasesData = data;
+        const token = await getUserToken();
+        if (!token) throw new Error("Usuário não autenticado");
+
+        const response = await fetch(`${API_URL}/history`, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Falha ao buscar histórico: " + response.statusText);
+        }
+
+        allPurchasesData = await response.json();
         
-        // Por enquanto usando dados mockados
+        // Atualiza as opções do filtro de mercado dinamicamente
+        updateMarketFilterOptions();
+
         renderPurchases();
+
     } catch (error) {
         console.error('Erro ao carregar compras:', error);
+        emptyState.style.display = 'block';
+        emptyState.querySelector('p').textContent = "Erro ao carregar histórico";
     }
 }
 
-// ============================
-// Event Listeners
-// ============================
+// Atualiza o <select> de mercados com base no histórico
+function updateMarketFilterOptions() {
+    const markets = new Set(allPurchasesData.map(p => p.marketId));
+    const marketNames = {
+        'market_A': 'Mercado A',
+        'market_B': 'Mercado B',
+        'market_default': 'Mercado Padrão'
+    };
 
+    // Limpa opções antigas (exceto "Todos")
+    filterMarket.innerHTML = '<option value="all">Todos os mercados</option>';
+
+    markets.forEach(marketId => {
+        const option = document.createElement('option');
+        option.value = marketId;
+        option.textContent = marketNames[marketId] || marketId;
+        filterMarket.appendChild(option);
+    });
+}
+
+
+// ============================
+// Event Listeners (iguais)
+// ============================
 btnBack.addEventListener('click', () => {
     window.location.href = 'index.html';
 });
-
 filterPeriod.addEventListener('change', renderPurchases);
 filterMarket.addEventListener('change', renderPurchases);
 
 // ============================
 // Inicialização
 // ============================
-
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await onAuthReady(); // Espera saber se o usuário está logado
     loadPurchasesFromBackend();
 });
