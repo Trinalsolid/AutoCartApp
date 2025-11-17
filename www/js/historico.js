@@ -2,14 +2,14 @@
 |--------------------------------------------------------------------------
 | JS do Histórico de Compras (historico.js)
 |--------------------------------------------------------------------------
-|
-| Busca o histórico real do endpoint /history do nosso backend.
-|
 */
 
-import { onAuthReady, getUserToken } from './firebase-auth.js';
+import { db, auth } from './firebase-config.js';
+import { onAuthReady, getUserToken } from './authchek.js';
+//Firestore tools
+import { collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// --- Elementos DOM (iguais aos seus) ---
+// --- Elementos DOM ---
 const btnBack = document.getElementById('btnBack');
 const filterPeriod = document.getElementById('filterPeriod');
 const filterMarket = document.getElementById('filterMarket');
@@ -19,20 +19,20 @@ const emptyState = document.getElementById('emptyState');
 const purchasesList = document.getElementById('purchasesList');
 
 // --- Variáveis Globais ---
-let allPurchasesData = []; // Armazena todas as compras do backend
-const API_URL = "http://localhost:3000";
+let allPurchasesData = []; 
 
 // ============================
-// Funções de formatação (iguais)
+// Funções de formatação (Mantidas iguais)
 // ============================
-function formatDate(dateString) {
-    const date = new Date(dateString);
+function formatDate(dateInput) {
+    // O input pode vir como Date Object ou String, garantimos que seja Date
+    const date = new Date(dateInput);
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
     
     if (date.toDateString() === today.toDateString()) {
-        return 'Hoje';
+        return 'Hoje às ' + date.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
     } else if (date.toDateString() === yesterday.toDateString()) {
         return 'Ontem';
     } else {
@@ -43,23 +43,21 @@ function formatDate(dateString) {
         });
     }
 }
+
 function formatPrice(price) {
-    return price.toLocaleString('pt-BR', { 
-        style: 'currency', 
-        currency: 'BRL' 
-    });
+    return price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
 // ============================
-// Filtrar compras (MODIFICADO)
+// Filtrar compras (Mantido igual)
 // ============================
 function filterPurchases() {
     const period = filterPeriod.value;
-    const market = filterMarket.value; // ex: 'market_A'
+    const market = filterMarket.value;
     const today = new Date();
     
     let filtered = allPurchasesData.filter(purchase => {
-        const purchaseDate = new Date(purchase.paidTimestamp); // Usamos o timestamp de pagamento
+        const purchaseDate = new Date(purchase.paidTimestamp);
         let passesDateFilter = true;
         let passesMarketFilter = true;
         
@@ -82,7 +80,7 @@ function filterPurchases() {
             passesDateFilter = purchaseDate >= yearAgo;
         }
         
-        // Filtro de mercado (agora usa o marketId real)
+        // Filtro de mercado
         if (market !== 'all') {
             passesMarketFilter = purchase.marketId === market;
         }
@@ -94,7 +92,7 @@ function filterPurchases() {
 }
 
 // ============================
-// Renderizar compras (MODIFICADO)
+// Renderizar compras (Mantido igual)
 // ============================
 function renderPurchases() {
     const filtered = filterPurchases();
@@ -111,18 +109,18 @@ function renderPurchases() {
     
     emptyState.style.display = 'none';
     
-    // Mapeia os marketId para nomes amigáveis (você pode expandir isso)
     const marketNames = {
         'market_A': 'Mercado A',
         'market_B': 'Mercado B',
-        'market_default': 'Mercado Padrão'
+        'market_default': 'Supermercado Central'
     };
     
     let html = '';
     filtered.forEach(purchase => {
         const marketName = marketNames[purchase.marketId] || purchase.marketId;
+        
         html += `
-            <div class="purchase-card" onclick="viewPurchaseDetails('${purchase.cartId}')">
+            <div class="purchase-card" onclick="viewPurchaseDetails('${purchase.id}')">
                 <div class="purchase-header">
                     <span class="purchase-market">${marketName}</span>
                     <span class="purchase-date">${formatDate(purchase.paidTimestamp)}</span>
@@ -139,52 +137,95 @@ function renderPurchases() {
 }
 
 // ============================
-// Ver detalhes da compra
+// Função para abrir o Comprovante (js/historico.js)
 // ============================
-function viewPurchaseDetails(cartId) {
-    alert(`Detalhes da compra #${cartId} - Em desenvolvimento`);
-    // Aqui você pode abrir um modal e mostrar a 'purchase.items'
+
+window.viewPurchaseDetails = function(id) {
+    const purchase = allPurchasesData.find(p => p.id === id);
+    if (!purchase) return;
+
+    // Preenche os dados do Modal
+    document.getElementById('modalDate').textContent = formatDate(purchase.paidTimestamp);
+    document.getElementById('modalTotal').textContent = formatPrice(purchase.totalValue);
+    document.getElementById('modalId').textContent = purchase.paymentId || purchase.id; // Mostra ID do MP ou do Firebase
+
+    // Gera lista de itens
+    const itemsContainer = document.getElementById('modalItems');
+    itemsContainer.innerHTML = purchase.items.map(item => `
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #4a5568;">
+            <span>${item.quantity || 1}x ${item.name}</span>
+            <span style="font-weight: 600;">${formatPrice(item.price)}</span>
+        </div>
+    `).join('');
+
+    // Mostra o modal (usando flex para centralizar)
+    const modal = document.getElementById('receiptModal');
+    modal.style.display = 'flex';
+};
+
+// Função para fechar (Global)
+window.closeReceipt = function() {
+    document.getElementById('receiptModal').style.display = 'none';
 }
 
 // ============================
-// Carregar do backend (MODIFICADO)
+// Carregar do Firebase (ATUALIZADO)
 // ============================
-async function loadPurchasesFromBackend() {
+async function loadPurchasesFromFirebase() {
     try {
-        const token = await getUserToken();
-        if (!token) throw new Error("Usuário não autenticado");
-
-        const response = await fetch(`${API_URL}/history`, {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error("Falha ao buscar histórico: " + response.statusText);
+        const user = auth.currentUser;
+        if (!user) {
+            // Se carregar a página direto sem auth estar pronto, espera um pouco ou redireciona
+            return; 
         }
 
-        allPurchasesData = await response.json();
-        
-        // Atualiza as opções do filtro de mercado dinamicamente
-        updateMarketFilterOptions();
+        // 1. Monta a Query para a coleção 'purchase_history'
+        const q = query(
+            collection(db, "purchase_history"),
+            where("userId", "==", user.uid),
+            orderBy("purchasedAt", "desc") 
+        );
 
+        const querySnapshot = await getDocs(q);
+
+        // 2. Mapeia os dados do Firestore para o formato que seu Front usa
+        allPurchasesData = querySnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                marketId: data.marketId,
+                items: data.items || [],
+                totalValue: Number(data.totalValue),
+                // O Firestore devolve Timestamp, convertemos para JS Date
+                // Se o campo paidTimestamp não existir, usa data atual como fallback
+                paidTimestamp: data.purchasedAt ? data.purchasedAt.toDate() : new Date()
+            };
+        });
+
+        // Atualiza os filtros e renderiza
+        updateMarketFilterOptions();
         renderPurchases();
 
     } catch (error) {
         console.error('Erro ao carregar compras:', error);
+        
+        // DICA DE DEBUG: Se der erro de indice, avisa no console
+        if (error.message.includes("index")) {
+            console.warn("⚠️ ATENÇÃO: Verifique o console do navegador. O Firebase exige um índice composto. Clique no link gerado no erro para criar.");
+        }
+
         emptyState.style.display = 'block';
-        emptyState.querySelector('p').textContent = "Erro ao carregar histórico";
+        emptyState.querySelector('p').textContent = "Erro ao carregar histórico.";
     }
 }
 
-// Atualiza o <select> de mercados com base no histórico
+// Atualiza o <select> de mercados
 function updateMarketFilterOptions() {
     const markets = new Set(allPurchasesData.map(p => p.marketId));
     const marketNames = {
         'market_A': 'Mercado A',
         'market_B': 'Mercado B',
-        'market_default': 'Mercado Padrão'
+        'market_default': 'Supermercado Central'
     };
 
     // Limpa opções antigas (exceto "Todos")
@@ -200,7 +241,7 @@ function updateMarketFilterOptions() {
 
 
 // ============================
-// Event Listeners (iguais)
+// Event Listeners e Init
 // ============================
 btnBack.addEventListener('click', () => {
     window.location.href = 'index.html';
@@ -208,10 +249,7 @@ btnBack.addEventListener('click', () => {
 filterPeriod.addEventListener('change', renderPurchases);
 filterMarket.addEventListener('change', renderPurchases);
 
-// ============================
-// Inicialização
-// ============================
 document.addEventListener('DOMContentLoaded', async () => {
-    await onAuthReady(); // Espera saber se o usuário está logado
-    loadPurchasesFromBackend();
+    await onAuthReady(); 
+    loadPurchasesFromFirebase(); // Nova função
 });

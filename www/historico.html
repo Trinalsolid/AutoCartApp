@@ -79,6 +79,35 @@
             <div class="purchases-list" id="purchasesList">
                 <!-- Itens serão inseridos via JavaScript -->
             </div>
+            <div id="receiptModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;">
+        <div class="modal-content" style="background: white; width: 90%; max-width: 400px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+            <div style="background: #48bb78; padding: 20px; text-align: center; color: white;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
+                <h2 style="margin: 0;">Pagamento Aprovado</h2>
+                <p style="margin: 5px 0 0 0; opacity: 0.9;" id="modalDate">DD/MM/AAAA HH:MM</p>
+            </div>
+            
+            <div style="padding: 20px; max-height: 60vh; overflow-y: auto;">
+                <h3 style="color: #2d3748; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0;">Resumo do Pedido</h3>
+                <div id="modalItems">
+                    </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-top: 20px; padding-top: 15px; border-top: 2px dashed #cbd5e0; font-weight: bold; font-size: 1.2rem;">
+                    <span>TOTAL</span>
+                    <span id="modalTotal" style="color: #48bb78;">R$ 0,00</span>
+                </div>
+
+                <div style="margin-top: 20px; background: #f7fafc; padding: 10px; border-radius: 8px; text-align: center;">
+                    <p style="font-size: 0.8rem; color: #718096; margin: 0;">ID da Transação</p>
+                    <p style="font-family: monospace; color: #4a5568; margin: 5px 0 0 0;" id="modalId">---</p>
+                </div>
+            </div>
+
+            <div style="padding: 20px; text-align: center; background: #f7fafc;">
+                <button onclick="closeReceipt()" style="background: #4a5568; color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%;">Fechar Comprovante</button>
+            </div>
+        </div>
+    </div>
         </div>
     </div>
 </body>

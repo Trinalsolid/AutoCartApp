@@ -46,9 +46,57 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    // --- LÓGICA DE RETORNO DO MERCADO PAGO ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const statusPagamento = urlParams.get('status'); 
+    const paymentId = urlParams.get('payment_id');
+
+    if (statusPagamento === 'approved') {
+        // A. Tela de Bloqueio (Feedback Visual Imediato)
+        document.body.innerHTML = `
+            <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;background:#f7fafc;font-family:sans-serif;">
+                <div style="font-size:4rem;">✅</div>
+                <h2 style="color:#2d3748;margin-top:20px;">Pagamento Confirmado!</h2>
+                <p style="color:#718096;">Finalizando pedido e gerando comprovante...</p>
+            </div>
+        `;
+
+        // B. Recupera ID do carrinho
+        const savedCartId = localStorage.getItem('savedCartId');
+        
+        if (savedCartId && token) {
+            // C. Reconecta socket especificamente para finalizar
+            socket = io(API_URL, { auth: { token } });
+            
+            socket.on('connect', () => {
+                console.log('Reconectado para finalizar checkout...');
+                
+                // D. Envia comando de confirmação
+                socket.emit('payment_confirmed', { 
+                    cartId: savedCartId, 
+                    paymentId: paymentId 
+                });
+            });
+
+            // E. Espera o servidor dizer que SALVOU NO BANCO
+            socket.on('checkout_complete', () => {
+                console.log("Banco atualizado. Redirecionando...");
+                localStorage.removeItem('savedCartId'); // Limpa lixo
+                
+                // F. Redireciona para o histórico
+                // Adicionamos um timestamp para garantir que não use cache
+                setTimeout(() => {
+                    window.location.href = 'historico.html?new_order=true&t=' + Date.now();
+                }, 1000); 
+            });
+            
+            return; // Para a execução do resto do script
+        }
+    }
+    // -------------------------------------------------------
+
     // 2. Descobrir qual carrinho conectar
     //    (ASSUMINDO que o QR Code te mandou para cá com URL params)
-    const urlParams = new URLSearchParams(window.location.search);
     const cartId = urlParams.get('cartId');
     const marketId = urlParams.get('marketId');
 
@@ -164,14 +212,65 @@ function addProductByBarcode(code) {
     showMessage('Processando...', 'info');
 }
 
-// Finalizar compra (agora emite um evento)
-function handleCheckout() {
-    if (!socket || !currentCartId) return;
+// ============================
+// Checkout com Mercado Pago
+// ============================
+
+async function handleCheckout() {
+    if (!currentCartId || !currentCart || !currentCart.items.length) {
+        showMessage('O carrinho está vazio ou não conectado.', 'error');
+        return;
+    }
     
-    // Aqui você abriria o modal de pagamento (payment.html)
-    // Por enquanto, vamos só emitir o evento
-    console.log("Iniciando checkout...");
-    socket.emit('start_checkout', { cartId: currentCartId });
+    // Desabilita o botão para evitar clique duplo
+    btnCheckout.disabled = true;
+    btnCheckout.textContent = "Gerando pagamento...";
+
+    try {
+        // 1. Pega o token de autenticação (já importado no seu código)
+        const token = await getUserToken(); 
+
+        // 2. Prepara os dados para enviar ao Backend
+        // O backend espera: { items: [...], payerEmail: ... }
+        const payload = {
+            items: currentCart.items,
+            payerEmail: document.getElementById('userEmail')?.textContent || 'email@teste.com'
+        };
+
+        // 3. Chama a API que criamos no Server
+        const response = await fetch(`${API_URL}/api/checkout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Importante para passar no checkAuth
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error('Falha ao criar pagamento');
+        }
+
+        const data = await response.json();
+
+        // 4. REDIRECIONA o usuário para o Mercado Pago
+        if (data.link_pagamento) {
+            // [NOVO] Salva o ID do carrinho para não perder na volta
+            localStorage.setItem('savedCartId', currentCartId);
+            localStorage.setItem('savedMarketId', new URLSearchParams(window.location.search).get('marketId'));
+
+            console.log("Redirecionando...", data.link_pagamento);
+            window.location.href = data.link_pagamento;
+        } else {
+            throw new Error('Link de pagamento não recebido');
+        }
+
+    } catch (error) {
+        console.error("Erro no checkout:", error);
+        showMessage('Erro ao iniciar pagamento: ' + error.message, 'error');
+        btnCheckout.disabled = false;
+        btnCheckout.textContent = `Finalizar Compra - ${formatPrice(currentCart.totalValue)}`;
+    }
 }
 
 // Atualizar exibicao do carrinho
