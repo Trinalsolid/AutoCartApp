@@ -27,18 +27,35 @@ Caso o PowerShell bloqueie a execução de scripts, rode:
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ````
 
-Rodando os projetos
+Rodando os projetos.<br>
 1️⃣ Sincronizar arquivos com Capacitor
 
 Para cada projeto (AutoCartApp ou AutoCartAppCarrinho), execute:
 
+2️⃣ Entrar na pasta do projeto
+
+````powershell
+cd AutoCartApp
+````
+ou
+````powershell
+cd AutoCartAppCarrinho
+````
+
+3️⃣ Instalar o Capacitor
+````powershell
+npm install @capacitor/core @capacitor/cli --save-dev
+````
+
+4️⃣ Sincronizar e ebrir projeto no Android Studio
+
 ````powershell
 cd AutoCartApp         # ou AutoCartAppCarrinho
 npx cap sync
+npx cap open android
 ````
 
-2️⃣ Abrir projeto no Android Studio
-npx cap open android
+---
 
 Isso abrirá o projeto no Android Studio para rodar o app em emulador ou dispositivo físico.
 
@@ -55,6 +72,6 @@ Ambos os projetos podem ser rodados separadamente, mas compartilham algumas depe
 Arquivos como node_modules/ e builds são ignorados pelo Git (.gitignore).
 Use a branch AutoCart-Alfa-1.1 para desenvolvimento e testes antes de integrar à main.
 
-**⚠️ Observação importante:** Sempre execute `npx cap sync` antes de abrir o projeto no Android Studio.
+**⚠️ Observação importante:** Sempre execute `npx cap sync` antes de abrir o projeto no Android Studio..<br>
 **⚠️ Observação importante:** Função de adicionar produto ao carrinho não está funcionando 100%, por favor verificar e testar ela, 
 infelizmente não consegui resolver o problema, sem falar que ainda precisa de integração, com o app do usário e do carrinho.
