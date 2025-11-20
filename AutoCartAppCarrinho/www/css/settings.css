@@ -1,0 +1,440 @@
+/* ============================
+   Reset e Configurações Globais
+   ============================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: #fafafa;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: contain;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+/* ============================
+   Header
+   ============================ */
+.header {
+    background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+    color: white;
+    padding: 20px;
+    padding-top: calc(20px + env(safe-area-inset-top));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    flex: 1;
+    text-align: center;
+}
+
+.btn-back {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.btn-back svg {
+    width: 24px;
+    height: 24px;
+    stroke: white;
+    stroke-width: 2.5;
+}
+
+.btn-back:active {
+    background: rgba(255,255,255,0.3);
+    transform: scale(0.95);
+}
+
+.header-space {
+    width: 40px;
+}
+
+/* ============================
+   Seções de Conteúdo
+   ============================ */
+.content-section {
+    padding: 24px 20px;
+    border-bottom: 8px solid #f8f9fa;
+}
+
+.content-section:last-child {
+    border-bottom: none;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.section-header svg {
+    width: 24px;
+    height: 24px;
+    stroke: #ff6b35;
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
+.section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+/* ============================
+   Settings Group e Items
+   ============================ */
+.settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.settings-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.settings-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.settings-item-info {
+    flex: 1;
+}
+
+.settings-item-info label {
+    font-weight: 600;
+    color: #333;
+    font-size: 15px;
+    display: block;
+    margin-bottom: 4px;
+    cursor: pointer;
+}
+
+.settings-item-info small {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.4;
+    display: block;
+}
+
+/* ============================
+   Paleta de Cores
+   ============================ */
+.color-palette {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.color-card {
+    background: white;
+    border: 3px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.color-card:active {
+    transform: scale(0.97);
+}
+
+.color-card.active {
+    border-color: #ff6b35;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
+}
+
+.color-preview {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+
+.color-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    flex: 1;
+}
+
+.color-check {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    background: #ff6b35;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.color-card.active .color-check {
+    opacity: 1;
+}
+
+/* ============================
+   Toggle Switch
+   ============================ */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e0;
+    border-radius: 34px;
+    transition: all 0.3s ease;
+}
+
+.toggle-slider::before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background-color: #ff6b35;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(24px);
+}
+
+/* ============================
+   Select Dropdown
+   ============================ */
+.select-dropdown {
+    padding: 10px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: white;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    min-width: 130px;
+    flex-shrink: 0;
+}
+
+.select-dropdown:focus {
+    border-color: #ff6b35;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+/* ============================
+   Botão Reset
+   ============================ */
+.btn-reset {
+    width: 100%;
+    padding: 16px 20px;
+    background: #dc3545;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.btn-reset svg {
+    width: 20px;
+    height: 20px;
+    stroke: white;
+    stroke-width: 2;
+}
+
+.btn-reset:active {
+    transform: scale(0.98);
+    background: #c82333;
+}
+
+/* ============================
+   Toast Notification
+   ============================ */
+.toast {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    font-weight: 500;
+    z-index: 1000;
+    transition: bottom 0.4s ease;
+    max-width: 90%;
+    text-align: center;
+}
+
+.toast.show {
+    bottom: 30px;
+    bottom: calc(30px + env(safe-area-inset-bottom));
+}
+
+/* ============================
+   Responsividade
+   ============================ */
+@media (min-width: 601px) {
+    body {
+        padding: 20px;
+        background: #f5f7fa;
+    }
+
+    .container {
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .header {
+        border-radius: 24px 24px 0 0;
+    }
+
+    .color-palette {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .content-section {
+        padding: 20px 16px;
+    }
+}
+
+/* ============================
+   Modo Escuro
+   ============================ */
+body.dark-mode {
+    background: #1a1a1a;
+}
+
+body.dark-mode .container {
+    background: #2d2d2d;
+}
+
+body.dark-mode .content-section {
+    border-bottom-color: #404040;
+}
+
+body.dark-mode .section-header h2 {
+    color: #e0e0e0;
+}
+
+body.dark-mode .settings-item {
+    border-bottom-color: #404040;
+}
+
+body.dark-mode .settings-item-info label {
+    color: #e0e0e0;
+}
+
+body.dark-mode .settings-item-info small {
+    color: #b0b0b0;
+}
+
+body.dark-mode .color-card {
+    background: #353535;
+    border-color: #505050;
+}
+
+body.dark-mode .color-card.active {
+    border-color: #ff6b35;
+}
+
+body.dark-mode .color-label {
+    color: #e0e0e0;
+}
+
+body.dark-mode .select-dropdown {
+    background: #353535;
+    border-color: #505050;
+    color: #e0e0e0;
+}
+
+body.dark-mode .toast {
+    background: #404040;
+}

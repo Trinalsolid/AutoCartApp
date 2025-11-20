@@ -1,0 +1,740 @@
+/* ============================
+   Reset e Configurações Globais
+   ============================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: #fafafa;
+    min-height: 100vh;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    overscroll-behavior-y: contain;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+/* ============================
+   Header
+   ============================ */
+.header {
+    background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+    color: white;
+    padding: 20px;
+    padding-top: calc(20px + env(safe-area-inset-top));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    flex: 1;
+    text-align: center;
+}
+
+.btn-back {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.btn-back svg {
+    width: 24px;
+    height: 24px;
+    stroke: white;
+    stroke-width: 2.5;
+}
+
+.btn-back:active {
+    background: rgba(255,255,255,0.3);
+    transform: scale(0.95);
+}
+
+.header-space {
+    width: 40px;
+}
+
+/* ============================
+   Seções de Conteúdo
+   ============================ */
+.content-section {
+    padding: 20px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    background: #fafafa;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* ============================
+   Filtros (Histórico)
+   ============================ */
+.filters-section {
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+    background: #fafafa;
+}
+
+.filter-select {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: border 0.3s ease;
+    color: #333;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #ff6b35;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+/* ============================
+   Cards de Resumo
+   ============================ */
+.summary-cards {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    background: #fafafa;
+}
+
+.summary-card {
+    background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+    padding: 20px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.summary-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.summary-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: white;
+    stroke-width: 2;
+}
+
+.summary-info {
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.summary-value {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.summary-label {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+/* ============================
+   Estado Vazio
+   ============================ */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.empty-state svg {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 15px;
+    opacity: 0.3;
+    stroke: #ff6b35;
+}
+
+.empty-state p {
+    font-size: 16px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.empty-state small {
+    font-size: 14px;
+    color: #999;
+}
+
+/* ============================
+   Lista de Compras (Histórico)
+   ============================ */
+.purchases-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.purchase-card {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 14px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.purchase-card:active {
+    transform: scale(0.98);
+    border-color: #ff6b35;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
+}
+
+.purchase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.purchase-market {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+}
+
+.purchase-date {
+    font-size: 12px;
+    color: #999;
+}
+
+.purchase-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.purchase-items {
+    font-size: 14px;
+    color: #666;
+}
+
+.purchase-total {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ff6b35;
+}
+
+/* ============================
+   Modal de Comprovante
+   ============================ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: white;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    max-height: 90vh;
+    overflow: hidden;
+    animation: modalSlideUp 0.3s ease;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header-success {
+    background: #48bb78;
+    padding: 30px 20px;
+    text-align: center;
+    color: white;
+}
+
+.success-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.modal-header-success h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 5px 0;
+}
+
+.modal-header-success p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.modal-body {
+    padding: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.receipt-title {
+    color: #2d3748;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin: 0 0 15px 0;
+    font-size: 18px;
+}
+
+.receipt-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px dashed #cbd5e0;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.receipt-total span:last-child {
+    color: #48bb78;
+}
+
+.receipt-transaction {
+    margin-top: 20px;
+    background: #f7fafc;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.transaction-label {
+    font-size: 0.8rem;
+    color: #718096;
+    margin: 0 0 5px 0;
+}
+
+.transaction-id {
+    font-family: monospace;
+    color: #4a5568;
+    margin: 0;
+    word-break: break-all;
+}
+
+.modal-footer {
+    padding: 20px;
+    text-align: center;
+    background: #f7fafc;
+}
+
+.btn-close-modal {
+    background: #4a5568;
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.btn-close-modal:active {
+    background: #2d3748;
+    transform: scale(0.98);
+}
+
+/* ============================
+   Formulários
+   ============================ */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #ff6b35;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+/* ============================
+   Botões
+   ============================ */
+.btn-primary {
+    flex: 1;
+    padding: 14px;
+    background: #ff6b35;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.btn-primary:active {
+    background: #ff5722;
+    transform: scale(0.98);
+}
+
+.btn-secondary {
+    flex: 1;
+    padding: 14px;
+    background: white;
+    color: #ff6b35;
+    border: 2px solid #ff6b35;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:active {
+    background: #fff5f0;
+    transform: scale(0.98);
+}
+
+/* ============================
+   Configurações / Profile
+   ============================ */
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 16px;
+}
+
+.profile-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 20px;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-info h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.profile-info p {
+    font-size: 14px;
+    color: #999;
+}
+
+.btn-edit {
+    padding: 10px 20px;
+    background: white;
+    border: 2px solid #ff6b35;
+    border-radius: 10px;
+    color: #ff6b35;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-edit:active {
+    background: #fff5f0;
+    transform: scale(0.95);
+}
+
+.settings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: #f8f9fa;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px;
+    background: white;
+    transition: background 0.2s ease;
+}
+
+.setting-item.clickable {
+    cursor: pointer;
+}
+
+.setting-item.clickable:active {
+    background: #fff5f0;
+}
+
+.setting-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff5f0;
+    border-radius: 12px;
+}
+
+.setting-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: #ff6b35;
+    stroke-width: 2;
+}
+
+.setting-info {
+    flex: 1;
+}
+
+.setting-name {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.setting-info small {
+    font-size: 13px;
+    color: #999;
+}
+
+.setting-arrow {
+    font-size: 24px;
+    color: #ccc;
+}
+
+.btn-logout {
+    width: 100%;
+    padding: 16px;
+    background: white;
+    color: #dc3545;
+    border: 2px solid #dc3545;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-logout:active {
+    background: #fff5f5;
+    transform: scale(0.98);
+}
+
+/* ============================
+   Toggle Switch
+   ============================ */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e0;
+    border-radius: 34px;
+    transition: all 0.3s ease;
+}
+
+.toggle-slider::before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background-color: #ff6b35;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(24px);
+}
+
+/* ============================
+   Otimizações para iPhone X+ (notch)
+   ============================ */
+@supports (padding: max(0px)) {
+    body {
+        padding-left: max(0px, env(safe-area-inset-left));
+        padding-right: max(0px, env(safe-area-inset-right));
+    }
+}
+
+/* ============================
+   Media Queries
+   ============================ */
+@media (min-width: 601px) {
+    body {
+        padding: 20px;
+        background: #f5f7fa;
+    }
+
+    .container {
+        border-radius: 24px;
+        min-height: auto;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .header {
+        border-radius: 24px 24px 0 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .summary-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .filters-section {
+        flex-direction: column;
+    }
+}
+
+/* ============================
+   Melhorias para Touch/Mobile
+   ============================ */
+@media (hover: none) {
+    .btn-back:hover {
+        background: rgba(255,255,255,0.2);
+    }
+
+    .btn-primary:hover {
+        background: #ff6b35;
+    }
+
+    .btn-secondary:hover {
+        background: white;
+    }
+
+    .purchase-card:hover {
+        transform: none;
+        border-color: #e0e0e0;
+    }
+}

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>AutoCart - Carregando...</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#ff6b35">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        .screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .screen.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .screen.fade-out {
+            opacity: 0;
+        }
+
+        #splashScreen {
+            background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        .splash-content {
+            text-align: center;
+            color: white;
+        }
+
+        .cart-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+            animation: bounce 1s infinite;
+        }
+
+        .cart-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: white;
+            stroke-width: 1.5;
+        }
+
+        .app-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 1.4s infinite ease-in-out;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        #welcomeScreen {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-top: calc(20px + env(safe-area-inset-top));
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+        }
+
+        .welcome-content {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .welcome-card {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .cart-icon-small {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .cart-icon-small svg {
+            width: 100%;
+            height: 100%;
+            stroke: #ff6b35;
+            stroke-width: 1.5;
+        }
+
+        .welcome-card h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-card p {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #ff6b35;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #ff5722;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e8ecf1;
+            color: #2c3e50;
+        }
+
+        .btn-secondary:hover {
+            background: #d5dce3;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(0);
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-title {
+                font-size: 2.5rem;
+            }
+            
+            .welcome-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .welcome-card h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="splashScreen" class="screen active">
+        <div class="splash-content">
+            <div class="cart-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+            </div>
+            <h1 class="app-title">AutoCart</h1>
+            <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="welcomeScreen" class="screen">
+        <div class="welcome-content">
+            <div class="welcome-card">
+                <div class="cart-icon-small">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </div>
+                <h2>Seja Bem-Vindo!</h2>
+                <p>Como deseja prosseguir?</p>
+                
+                <div class="button-group">
+                    <button id="btnConnectApp" class="btn btn-primary">
+                        Conectar com nosso app
+                    </button>
+                    <button id="btnContinueWithout" class="btn btn-secondary">
+                        Prosseguir sem o app
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const splashScreen = document.getElementById('splashScreen');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const btnConnectApp = document.getElementById('btnConnectApp');
+        const btnContinueWithout = document.getElementById('btnContinueWithout');
+
+        function transitionToScreen(currentScreen, nextScreen) {
+            currentScreen.classList.add('fade-out');
+            
+            setTimeout(() => {
+                currentScreen.classList.remove('active', 'fade-out');
+                nextScreen.classList.add('active');
+            }, 600);
+        }
+
+        function redirectToIndex() {
+            splashScreen.classList.add('fade-out');
+            welcomeScreen.classList.add('fade-out');
+            
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 600);
+        }
+
+        setTimeout(() => {
+            transitionToScreen(splashScreen, welcomeScreen);
+        }, 2000);
+
+        btnConnectApp.addEventListener('click', () => {
+            alert('Conectando com o app...\n\nEssa funcionalidade será implementada em breve!');
+        });
+
+        btnContinueWithout.addEventListener('click', () => {
+            redirectToIndex();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && splashScreen.classList.contains('active')) {
+                transitionToScreen(splashScreen, welcomeScreen);
+            }
+        });
+    </script>
+</body>
+</html>

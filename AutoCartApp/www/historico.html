@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Histórico de Compras - AutoCart</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#ff6b35">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <link rel="stylesheet" href="css/pages.css">
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/authchek.js"></script>
+    <script type="module" src="js/historico.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="btn-back" id="btnBack">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <h1>Histórico de Compras</h1>
+            <div class="header-space"></div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filters-section">
+            <select class="filter-select" id="filterPeriod">
+                <option value="all">Todos os períodos</option>
+                <option value="week">Última semana</option>
+                <option value="month" selected>Último mês</option>
+                <option value="3months">Últimos 3 meses</option>
+                <option value="year">Último ano</option>
+            </select>
+
+            <select class="filter-select" id="filterMarket">
+                <option value="all">Todos os mercados</option>
+                <option value="market1">Mercado A</option>
+                <option value="market2">Mercado B</option>
+                <option value="market3">Mercado C</option>
+            </select>
+        </div>
+
+        <!-- Resumo -->
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </div>
+                <div class="summary-info">
+                    <span class="summary-value" id="totalPurchases">0</span>
+                    <span class="summary-label">Compras</span>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div class="summary-info">
+                    <span class="summary-value" id="totalSpent">R$ 0,00</span>
+                    <span class="summary-label">Total gasto</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Compras -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>Suas Compras</h2>
+            </div>
+
+            <!-- Estado vazio -->
+            <div class="empty-state" id="emptyState">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <p>Nenhuma compra encontrada</p>
+                <small>Suas compras aparecerão aqui</small>
+            </div>
+
+            <!-- Lista de compras -->
+            <div class="purchases-list" id="purchasesList">
+                <!-- Itens serão inseridos via JavaScript -->
+            </div>
+
+            <!-- Modal de Comprovante -->
+            <div id="receiptModal" class="modal-overlay">
+                <div class="modal">
+                    <div class="modal-header-success">
+                        <div class="success-icon">✅</div>
+                        <h2>Pagamento Aprovado</h2>
+                        <p id="modalDate">DD/MM/AAAA HH:MM</p>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <h3 class="receipt-title">Resumo do Pedido</h3>
+                        <div id="modalItems"></div>
+                        
+                        <div class="receipt-total">
+                            <span>TOTAL</span>
+                            <span id="modalTotal">R$ 0,00</span>
+                        </div>
+
+                        <div class="receipt-transaction">
+                            <p class="transaction-label">ID da Transação</p>
+                            <p class="transaction-id" id="modalId">---</p>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button onclick="closeReceipt()" class="btn-close-modal">
+                            Fechar Comprovante
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

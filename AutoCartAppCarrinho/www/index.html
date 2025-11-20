@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoCart - Inicializando...</title>
+    <meta name="theme-color" content="#ff6b35">
+</head>
+<body style="background:#ff6b35; margin:0;">
+
+<script>
+    // Detecta se o usuário veio de dentro do app (ex: navegação interna)
+    const cameFromInternalNavigation = document.referrer !== "" &&
+                                       !document.referrer.includes("index.html");
+
+    // Se veio de outra página do app, NÃO redireciona
+    if (cameFromInternalNavigation) {
+        console.log("Acesso interno → não redirecionar.");
+    } else {
+        // Lógica de primeira abertura
+        const firstTime = !localStorage.getItem("alreadyOpened");
+
+        if (firstTime) {
+            localStorage.setItem("alreadyOpened", "1");
+            window.location.replace("welcome.html");
+        } else {
+            window.location.replace("inicio.html");
+        }
+    }
+</script>
+
+</body>
+</html>

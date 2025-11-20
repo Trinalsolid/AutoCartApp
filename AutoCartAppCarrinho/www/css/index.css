@@ -1,0 +1,737 @@
+/* ============================
+   Reset e Configurações Globais
+   ============================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overscroll-behavior-y: contain;
+}
+
+/* ============================
+   Container Principal
+   ============================ */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 0;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* ============================
+   Header - COM ESPAÇAMENTO INTERNO
+   ============================ */
+.header {
+    background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+    color: white;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    gap: 15px;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) 20px env(safe-area-inset-left);
+    padding-top: calc(20px + env(safe-area-inset-top));
+    padding-left: calc(24px + env(safe-area-inset-left));
+    padding-right: calc(24px + env(safe-area-inset-right));
+}
+
+.header h1 {
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+}
+
+.header-cart-icon {
+    width: 24px;
+    height: 24px;
+    stroke: white;
+    stroke-width: 2;
+}
+
+.total-display {
+    text-align: right;
+}
+
+.total-label {
+    font-size: 12px;
+    opacity: 0.9;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.total-value {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+/* ============================
+   Botão Menu do Usuário
+   ============================ */
+.user-menu-btn {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.user-menu-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.05);
+}
+
+.user-menu-btn:active {
+    transform: scale(0.95);
+}
+
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: white;
+    color: #ff6b35;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+/* ============================
+   Menu Lateral do Usuário
+   ============================ */
+.user-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(2px);
+}
+
+.user-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.user-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    max-width: 85vw;
+    height: 100vh;
+    background: white;
+    z-index: 999;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.2);
+    transition: right 0.3s ease;
+    overflow-y: auto;
+}
+
+.user-menu.active {
+    right: 0;
+}
+
+.user-menu-header {
+    background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+    padding: 30px 20px;
+    padding-top: calc(30px + env(safe-area-inset-top));
+    color: white;
+    position: relative;
+}
+
+.user-avatar-large {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: white;
+    color: #ff6b35;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 28px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.user-info h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.user-info p {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.close-menu-btn {
+    position: absolute;
+    top: 20px;
+    top: calc(20px + env(safe-area-inset-top));
+    right: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.close-menu-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: rotate(90deg);
+}
+
+.close-menu-btn:active {
+    transform: rotate(90deg) scale(0.95);
+}
+
+/* ============================
+   Itens do Menu
+   ============================ */
+.user-menu-items {
+    padding: 10px 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 18px 20px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.2s ease;
+    gap: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.menu-item:hover {
+    background: #fff5f0;
+}
+
+.menu-item:active {
+    background: #ffe8dc;
+}
+
+.menu-icon {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff5f0;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.menu-text {
+    flex: 1;
+}
+
+.menu-text span {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.menu-text small {
+    display: block;
+    font-size: 13px;
+    color: #999;
+}
+
+.menu-arrow {
+    font-size: 24px;
+    color: #ccc;
+    font-weight: 300;
+}
+
+.menu-divider {
+    height: 8px;
+    background: #f8f9fa;
+    margin: 10px 0;
+}
+
+.menu-item-danger {
+    color: #dc3545;
+}
+
+.menu-item-danger .menu-icon {
+    background: #fff5f5;
+}
+
+.menu-item-danger:hover {
+    background: #fff5f5;
+}
+
+/* ============================
+   Seção de Scanner
+   ============================ */
+.scanner-section {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    background: white;
+}
+
+.scanner-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#barcodeInput {
+    flex: 1;
+    padding: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+#barcodeInput:focus {
+    outline: none;
+    border-color: #ff6b35;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.btn-add {
+    padding: 16px 24px;
+    background: #ff6b35;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.btn-add:hover {
+    background: #ff5722;
+}
+
+.btn-add:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+.btn-add:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* ============================
+   Mensagens
+   ============================ */
+.message {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    display: none;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    display: block;
+}
+
+.message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    display: block;
+}
+
+.message.info {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+    display: block;
+}
+
+/* ============================
+   Seção do Carrinho
+   ============================ */
+.cart-section {
+    padding: 20px;
+    background: #fafafa;
+    min-height: 400px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+}
+
+.cart-header {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.empty-cart svg {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+    opacity: 0.3;
+    stroke: #ff6b35;
+}
+
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ============================
+   Item do Carrinho
+   ============================ */
+.cart-item {
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cart-item:active {
+    transform: scale(0.99);
+}
+
+.item-info {
+    flex: 1;
+    padding-right: 10px;
+}
+
+.item-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.item-code {
+    font-size: 11px;
+    color: #999;
+    margin-bottom: 6px;
+}
+
+.item-price {
+    font-size: 14px;
+    color: #ff6b35;
+    font-weight: 600;
+}
+
+/* ============================
+   Controles do Item
+   ============================ */
+.item-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.qty-btn {
+    width: 36px;
+    height: 36px;
+    border: 2px solid #ff6b35;
+    background: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ff6b35;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qty-btn:active {
+    transform: scale(0.95);
+    background: #ff6b35;
+    color: white;
+}
+
+.qty-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.qty-display {
+    min-width: 32px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+}
+
+.btn-remove {
+    width: 36px;
+    height: 36px;
+    border: 2px solid #dc3545;
+    background: white;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #dc3545;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-left: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-remove:active {
+    transform: scale(0.95);
+    background: #dc3545;
+    color: white;
+}
+
+.btn-remove:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ============================
+   Seção de Checkout
+   ============================ */
+.checkout-section {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 2px solid #e0e0e0;
+}
+
+.btn-checkout {
+    width: 100%;
+    padding: 18px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-checkout:hover {
+    background: #218838;
+}
+
+.btn-checkout:active {
+    transform: scale(0.98);
+    background: #218838;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-checkout:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* ============================
+   Otimizações para iPhone X+ (notch)
+   ============================ */
+@supports (padding: max(0px)) {
+    body {
+        padding-left: max(0px, env(safe-area-inset-left));
+        padding-right: max(0px, env(safe-area-inset-right));
+    }
+}
+
+/* ============================
+   Media Queries - Tablet/Desktop
+   ============================ */
+@media (min-width: 601px) {
+    body {
+        padding: 20px;
+    }
+
+    .container {
+        border-radius: 24px;
+        min-height: auto;
+    }
+
+    .header {
+        padding: 35px 30px;
+        border-radius: 24px 24px 0 0;
+    }
+
+    .header h1 {
+        font-size: 30px;
+    }
+
+    .total-value {
+        font-size: 32px;
+    }
+
+    .scanner-section {
+        padding: 25px 30px;
+    }
+
+    .cart-section {
+        padding: 30px;
+    }
+}
+
+/* ============================
+   Media Queries - Mobile
+   ============================ */
+@media (max-width: 600px) {
+    .header {
+        padding-left: calc(16px + env(safe-area-inset-left));
+        padding-right: calc(16px + env(safe-area-inset-right));
+    }
+    
+    .header h1 {
+        font-size: 22px;
+    }
+
+    .total-value {
+        font-size: 24px;
+    }
+
+    .btn-add {
+        padding: 16px 20px;
+        font-size: 15px;
+    }
+
+    .cart-item {
+        padding: 16px;
+    }
+
+    .item-name {
+        font-size: 14px;
+    }
+
+    .qty-btn,
+    .btn-remove {
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+    }
+}
+
+/* ============================
+   Melhorias para Touch/Mobile
+   ============================ */
+@media (hover: none) {
+    .btn-add:hover {
+        background: #ff6b35;
+    }
+
+    .qty-btn:hover {
+        background: white;
+        color: #ff6b35;
+    }
+
+    .btn-remove:hover {
+        background: white;
+        color: #dc3545;
+    }
+
+    .btn-checkout:hover {
+        background: #28a745;
+    }
+    
+    .user-menu-btn:hover {
+        background: rgba(255,255,255,0.2);
+        transform: none;
+    }
+
+    .menu-item:hover {
+        background: transparent;
+    }
+
+    .close-menu-btn:hover {
+        background: rgba(255,255,255,0.2);
+        transform: none;
+    }
+}
